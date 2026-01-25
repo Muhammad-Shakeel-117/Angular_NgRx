@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/app.state';
+import { AuthService } from '../services/auth.service';
+import { loginStart } from '../states/auth.actions';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +14,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class LoginComponent {
   loginForm!: FormGroup;
+
+  constructor(private store: Store<AppState>, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -24,11 +30,12 @@ export class LoginComponent {
   } 
 
   onLogin(){
-    // const { email, password } = this.loginForm.value;
+    const { email, password } = this.loginForm.value;
     // this.authService.login(email, password).subscribe((response) => {
-    //   this.loggedInUser = response;
+      
     // })
-    // this.store.dispatch(loginStart({email, password}));
+    
+    this.store.dispatch(loginStart({email, password}));
   }
 
   validateEmail(){

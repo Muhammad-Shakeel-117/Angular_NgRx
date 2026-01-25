@@ -4,12 +4,16 @@ import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { environment } from './environment/environment';
+import { provideEffects } from '@ngrx/effects';
+import { provideHttpClient } from '@angular/common/http';
 import { appReducer } from './store/app.state';
+import { AuthEffects } from './auth/states/auth.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideStore({}),
+    provideStore(appReducer),
+    provideEffects(AuthEffects),
     provideStoreDevtools({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Production mein logs band
@@ -18,5 +22,6 @@ export const appConfig: ApplicationConfig = {
       traceLimit: 75, // Stack trace limit
       connectInZone: true, // Zone.js compatible
     }),
+    provideHttpClient(),
   ],
 };
