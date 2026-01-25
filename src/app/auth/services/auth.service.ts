@@ -64,7 +64,7 @@ export class AuthService {
   }
 
   formatUserData(response: AuthResponse) {
-    const expirationTimeStamp = Date.now() + +response.expiresIn * 1000;
+    const expirationTimeStamp = Date.now() + (+response.expiresIn * 1000);
     const formattedUser: User = {
       accessToken: response.idToken,
       email: response.email,
