@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.state';
+import { signupStart } from '../states/auth.actions';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
@@ -31,7 +33,7 @@ signupForm!: FormGroup;
 
   onSignup(){
     const { email, password } = this.signupForm.value;
-    // this.store.dispatch(signupStart({email, password}));
+    this.store.dispatch(signupStart({email, password}));
   }
 
 

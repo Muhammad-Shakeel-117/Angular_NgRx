@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { loginStart, loginSuccess } from './auth.actions';
+import {
+  loginStart,
+  loginSuccess,
+  signupStart,
+  signupSuccess,
+} from './auth.actions';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -22,15 +27,41 @@ export class AuthEffects {
       exhaustMap((action) => {
         this.store.dispatch(setIsLoading({ value: true }));
         return this.authService.login(action.email, action.password).pipe(
-          map((data: any) => {
+          map((data) => {
             this.store.dispatch(setIsLoading({ value: false }));
-            return loginSuccess({ user: data });
+            const loggedUser = this.authService.formatUserData(data);
+            this.authService.saveUserToLocalStorage(loggedUser);
+            return loginSuccess({ user: loggedUser });
           }),
           catchError((errorResponse) => {
             this.store.dispatch(setIsLoading({ value: false }));
-            const errorMessage = this.authService.getErrorMessage(errorResponse);
-            return of(setErrorMessage({message: errorMessage}));
-          })
+            const errorMessage =
+              this.authService.getErrorMessage(errorResponse);
+            return of(setErrorMessage({ message: errorMessage }));
+          }),
+        );
+      }),
+    );
+  });
+
+  signup$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(signupStart),
+      exhaustMap((action) => {
+        this.store.dispatch(setIsLoading({ value: true }));
+        return this.authService.signup(action.email, action.password).pipe(
+          map((data) => {
+            this.store.dispatch(setIsLoading({ value: false }));
+            const signedUser = this.authService.formatUserData(data);
+            this.authService.saveUserToLocalStorage(signedUser);
+            return signupSuccess({ user: signedUser });
+          }),
+          catchError((errorResponse) => {
+            this.store.dispatch(setIsLoading({ value: false }));
+            const errorMessage =
+              this.authService.getErrorMessage(errorResponse);
+            return of(setErrorMessage({ message: errorMessage }));
+          }),
         );
       }),
     );
@@ -39,7 +70,7 @@ export class AuthEffects {
   loginRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(loginSuccess),
+        ofType(...[loginSuccess, signupSuccess]),
         tap((action) => {
           console.log('Login Success Effect Called!');
 
