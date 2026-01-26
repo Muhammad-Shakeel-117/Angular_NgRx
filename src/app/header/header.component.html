@@ -19,7 +19,7 @@
     </span>
     <span *ngIf="(loggedUser$ | async)">
       <a href="#">{{ (loggedUser$ | async)?.email }}</a>
-      <button class="logout-button">LOGOUT</button>
+      <button class="logout-button" (click)="onLogoutClicked()">LOGOUT</button>
     </span>
   </div>
 </div>

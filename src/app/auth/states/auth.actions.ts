@@ -6,7 +6,7 @@ export const loginStart = createAction('[auth] login start',
 )
 
 export const loginSuccess = createAction('[auth] login success', 
-    props<{ user: User}>()
+    props<{ user: User | null, redirect: boolean}>()
 )
 
 export const signupStart = createAction('[auth] signup start', 
@@ -14,5 +14,11 @@ export const signupStart = createAction('[auth] signup start',
 )
 
 export const signupSuccess = createAction('[auth] signup success', 
-    props<{ user: User}>()
+    props<{ user: User, redirect: boolean}>()
 )
+
+export const autoLogin = createAction(
+    '[auth] auto login'
+)
+
+export const logout = createAction('[auth] logout');

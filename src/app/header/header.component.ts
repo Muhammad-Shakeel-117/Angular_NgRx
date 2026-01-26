@@ -6,6 +6,7 @@ import { AppState } from '../store/app.state';
 import { Store } from '@ngrx/store';
 import { getLoggedUser } from '../auth/states/auth.selector';
 import { AsyncPipe, NgIf } from '@angular/common';
+import { logout } from '../auth/states/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -22,6 +23,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedUser$ = this.store.select(getLoggedUser);
+  }
+
+  onLogoutClicked(){
+    this.store.dispatch(logout());
   }
 
 }

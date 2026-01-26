@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { getErrorMessage, getIsLoading } from './shared/shared.selector';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ToasterComponent } from "./toaster/toaster.component";
+import { autoLogin } from './auth/states/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -25,5 +26,6 @@ export class AppComponent implements OnInit {
    ngOnInit(): void {
     this.showLoading$ = this.store.select(getIsLoading);
     this.errorMessage$ = this.store.select(getErrorMessage);
+    this.store.dispatch(autoLogin());
    }
 }

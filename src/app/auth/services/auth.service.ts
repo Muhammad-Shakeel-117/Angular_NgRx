@@ -4,12 +4,15 @@ import { AUTH_API_KEY } from '../../constants';
 import { AuthResponse } from '../../models/auth-response.model';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.model';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/app.state';
+import { logout } from '../states/auth.actions';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private store: Store<AppState>) {}
 
   timer: any;
 
@@ -77,8 +80,47 @@ export class AuthService {
   saveUserToLocalStorage(user: User) {
     try {
       localStorage.setItem('currentUser', JSON.stringify(user));
+      this.autoLogoutUser(user);
     } catch (error) {
       console.log('Error saving user data to local storage', error);
     }
   }
+
+  readUserFromLocalStorage(){
+        try{
+            const loggedUser = localStorage.getItem('currentUser');
+
+            if(!loggedUser){
+                return null;
+            }
+            const user: User = JSON.parse(loggedUser)
+
+            if(user.expiresAt <= Date.now()){
+                localStorage.removeItem('currentUser');
+                return null;
+            }
+            return user;
+
+        }catch(error){
+            localStorage.removeItem('currentUser');
+            return null;
+        }
+    }
+
+    logout(){
+        localStorage.removeItem('currentUser');
+
+        if(this.timer){
+            clearTimeout(this.timer);
+            this.timer = null;
+        }
+    }
+
+    autoLogoutUser(user: User){
+        const interval = user.expiresAt - Date.now();
+        console.log(interval);
+        this.timer = setTimeout(() => {
+            this.store.dispatch(logout())
+        }, interval)
+    }
 }
