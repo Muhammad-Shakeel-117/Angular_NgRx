@@ -37,9 +37,11 @@ export class AddCourseComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.editModeSubscription = this.store.select(getEditMode).subscribe((value) => {
-      this.editMode = value;
-    });
+    this.editModeSubscription = this.store
+      .select(getEditMode)
+      .subscribe((value) => {
+        this.editMode = value;
+      });
 
     this.init();
     this.subscribeToSelectedcourse();
@@ -64,9 +66,11 @@ export class AddCourseComponent implements OnInit, OnDestroy {
   }
 
   subscribeToSelectedcourse() {
-    this.selectedCourseSubscription = this.store.select(getSelectedCourse).subscribe((data) => {
-      this.course = data;
-    });
+    this.selectedCourseSubscription = this.store
+      .select(getSelectedCourse)
+      .subscribe((data) => {
+        this.course = data;
+      });
     if (this.editMode && this.course) {
       this.courseForm.patchValue(this.course);
     } else {
@@ -79,6 +83,7 @@ export class AddCourseComponent implements OnInit, OnDestroy {
   }
 
   onCreateOrUpdateCourse() {
+    
     if (!this.courseForm.valid) {
       return;
     }
@@ -93,14 +98,13 @@ export class AddCourseComponent implements OnInit, OnDestroy {
       };
 
       this.store.dispatch(updateCourse({ course: updatedCourse }));
-
     } else {
+      
       this.store.dispatch(createCourse({ course: this.courseForm.value }));
     }
-      this.store.dispatch(showForm({ value: false }));
-      this.store.dispatch(setEditMode({editMode: false}));
-      this.store.dispatch(setSelectedCourse({course: null}));
-
+    this.store.dispatch(showForm({ value: false }));
+    this.store.dispatch(setEditMode({ editMode: false }));
+    this.store.dispatch(setSelectedCourse({ course: null }));
   }
 
   showTitleValidationerrors() {
@@ -143,6 +147,15 @@ export class AddCourseComponent implements OnInit, OnDestroy {
       }
     }
     return '';
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    const fileNameSpan = document.querySelector('.file-name');
+    if (fileNameSpan && file) {
+      fileNameSpan.textContent = file.name;
+      this.courseForm.patchValue({ image: file.name });
+    }
   }
 
   ngOnDestroy(): void {

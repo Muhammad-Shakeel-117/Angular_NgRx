@@ -1,8 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
 import { initialState } from './courses.state';
 import {
-  createCourse,
+  createCourseSuccess,
   deleteCourse,
+  readCoursesSuccess,
   setEditMode,
   setSelectedCourse,
   showForm,
@@ -17,12 +18,10 @@ export const coursesReducer = createReducer(
       showForm: action.value,
     };
   }),
-  on(createCourse, (state, action) => {
-    const course = { ...action.course };
-    course.id = state.courses.length + 1;
+  on(createCourseSuccess, (state, action) => {
     return {
       ...state,
-      courses: [...state.courses, course],
+      courses: [...state.courses, action.course],
     };
   }),
   on(setEditMode, (state, action) => {
@@ -51,10 +50,16 @@ export const coursesReducer = createReducer(
     };
   }),
   on(deleteCourse, (state, action) => {
-    const updArray = state.courses.filter(cor => cor.id !== action.id);
+    const updArray = state.courses.filter((cor) => cor.id !== action.id);
     return {
       ...state,
       courses: updArray,
+    };
+  }),
+  on(readCoursesSuccess, (state, action) => {
+    return {
+      ...state,
+      courses: action.courses,
     };
   }),
 );

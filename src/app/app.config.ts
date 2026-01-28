@@ -3,7 +3,6 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { environment } from './environment/environment';
 import { provideEffects } from '@ngrx/effects';
 import { provideHttpClient } from '@angular/common/http';
 import { appReducer } from './store/app.state';
@@ -16,7 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideEffects(AuthEffects),
     provideStoreDevtools({
       maxAge: 25, // Retains last 25 states
-      logOnly: environment.production, // Production mein logs band
+      logOnly: false, // Production mein logs band
       autoPause: true, // Pauses recording actions and state changes
       trace: true, // Stack trace for actions
       traceLimit: 75, // Stack trace limit

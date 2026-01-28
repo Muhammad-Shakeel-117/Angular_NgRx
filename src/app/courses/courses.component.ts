@@ -7,7 +7,7 @@ import { getCourses, getShowForm } from './state/courses.selector';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AddCourseComponent } from './add-course/add-course.component';
-import { setEditMode, showForm } from './state/courses.action';
+import { readCourses, setEditMode, showForm } from './state/courses.action';
 
 @Component({
   selector: 'app-courses',
@@ -25,6 +25,7 @@ export class CoursesComponent implements OnInit {
   ngOnInit(): void {
     this.courses$ = this.store.select(getCourses);
     this.showForm$ = this.store.select(getShowForm);
+    this.store.dispatch(readCourses());
   }
 
   showCreateForm() {

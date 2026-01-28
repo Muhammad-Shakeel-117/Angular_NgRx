@@ -45,7 +45,7 @@
                 <div class="form-field file-upload-field">
                     <label for="image">Course Image</label>
                     <div class="file-input-wrapper">
-                        <input type="file" accept="image/*" formControlName="image" #selectFile>
+                        <input type="file" accept="image/*" #selectFile (change)="onFileSelected($event)">
                         <button type="button" class="browse-button" (click)="selectFile.click()">Browse File</button>
                         <span class="file-name">No file chosen</span>
                     </div>

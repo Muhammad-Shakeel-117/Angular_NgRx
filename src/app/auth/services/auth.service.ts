@@ -1,12 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AUTH_API_KEY } from '../../constants';
 import { AuthResponse } from '../../models/auth-response.model';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.model';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.state';
 import { logout } from '../states/auth.actions';
+import { environments } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,7 @@ export class AuthService {
   timer: any;
 
   login(email: string, password: string): Observable<AuthResponse> {
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${AUTH_API_KEY}`;
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environments.firebaseConfig.apiKey}`;
     const body = {
       email,
       password,
@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   signup(email: string, password: string): Observable<AuthResponse> {
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${AUTH_API_KEY}`;
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environments.firebaseConfig.apiKey}`;
     const body = {
       email,
       password,
