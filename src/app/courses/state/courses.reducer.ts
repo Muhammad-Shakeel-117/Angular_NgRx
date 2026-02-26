@@ -2,12 +2,12 @@ import { createReducer, on } from '@ngrx/store';
 import { initialState } from './courses.state';
 import {
   createCourseSuccess,
-  deleteCourse,
+  deleteCourseSuccess,
   readCoursesSuccess,
   setEditMode,
   setSelectedCourse,
   showForm,
-  updateCourse,
+  updateCourseSuccess,
 } from './courses.action';
 
 export const coursesReducer = createReducer(
@@ -36,7 +36,7 @@ export const coursesReducer = createReducer(
       selectedCourse: action.course,
     };
   }),
-  on(updateCourse, (state, action) => {
+  on(updateCourseSuccess, (state, action) => {
     const updCourses = state.courses.map((c) => {
       if (c.id === action.course.id) {
         return action.course;
@@ -49,7 +49,7 @@ export const coursesReducer = createReducer(
       courses: updCourses,
     };
   }),
-  on(deleteCourse, (state, action) => {
+  on(deleteCourseSuccess, (state, action) => {
     const updArray = state.courses.filter((cor) => cor.id !== action.id);
     return {
       ...state,

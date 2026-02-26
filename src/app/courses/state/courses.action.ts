@@ -34,7 +34,18 @@ export const updateCourse = createAction(
   '[courses] update course',
   props<{ course: Course }>(),
 );
+
+export const updateCourseSuccess = createAction(
+  '[courses] update course success',
+  props<{ course: Course }>(),
+);
+
 export const deleteCourse = createAction(
   '[courses] delete course',
+  props<{ id: string }>(),
+);
+
+export const deleteCourseSuccess = createAction(
+  '[courses] delete course success',
   props<{ id: string }>(),
 );

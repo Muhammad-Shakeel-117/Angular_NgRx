@@ -3,8 +3,12 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
   createCourse,
   createCourseSuccess,
+  deleteCourse,
+  deleteCourseSuccess,
   readCourses,
   readCoursesSuccess,
+  updateCourse,
+  updateCourseSuccess,
 } from './courses.action';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import { CourseService } from '../services/course.service';
@@ -55,6 +59,46 @@ export class CoursesEffects {
           catchError((error) => {
             this.store.dispatch(setIsLoading({ value: false }));
             const message = 'Something went wrong. Cannot fetch all courses.';
+            return of(setErrorMessage({ message }));
+          }),
+        );
+      }),
+    );
+  });
+
+  updateCourse$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updateCourse),
+      mergeMap((action) => {
+        this.store.dispatch(setIsLoading({ value: true }));
+        return this.courseService.updateCourse(action.course).pipe(
+          map((data) => {
+            this.store.dispatch(setIsLoading({ value: false }));
+            return updateCourseSuccess({ course: action.course });
+          }),
+          catchError((error) => {
+            this.store.dispatch(setIsLoading({ value: false }));
+            const message = 'Something went wrong. Cannot update the course.';
+            return of(setErrorMessage({ message }));
+          }),
+        );
+      }),
+    );
+  });
+
+  deleteCourse$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(deleteCourse),
+      mergeMap((action) => {
+        this.store.dispatch(setIsLoading({ value: true }));
+        return this.courseService.deleteCourse(action.id).pipe(
+          map((data) => {
+            this.store.dispatch(setIsLoading({ value: false }));
+            return deleteCourseSuccess({ id: action.id });
+          }),
+          catchError((error) => {
+            this.store.dispatch(setIsLoading({ value: false }));
+            const message = 'Something went wrong. Cannot delete the course.';
             return of(setErrorMessage({ message }));
           }),
         );

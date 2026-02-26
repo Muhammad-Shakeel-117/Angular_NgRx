@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
 import { AppState } from '../store/app.state';
@@ -13,10 +13,9 @@ import { logout } from '../auth/states/auth.actions';
   standalone: true,
   imports: [RouterLink, RouterLinkActive, NgIf, AsyncPipe],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
-
   loggedUser$!: Observable<User | null>;
 
   constructor(private store: Store<AppState>) {}
@@ -25,8 +24,7 @@ export class HeaderComponent implements OnInit {
     this.loggedUser$ = this.store.select(getLoggedUser);
   }
 
-  onLogoutClicked(){
+  onLogoutClicked() {
     this.store.dispatch(logout());
   }
-
 }

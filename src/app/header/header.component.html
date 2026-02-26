@@ -10,14 +10,14 @@
       >Home</a
     >
     <a routerLink="/counter" routerLinkActive="active">Counter</a>
-    <a routerLink="/courses" routerLinkActive="active">Courses</a>
+    <a routerLink="/courses" routerLinkActive="active" *ngIf="(loggedUser$ | async)">Courses</a>
   </div>
   <div class="header-auth-links">
     <span *ngIf="!(loggedUser$ | async)">
       <a routerLink="/auth/login">Login</a>
       <a routerLink="/auth/signup">Signup</a>
     </span>
-    <span *ngIf="(loggedUser$ | async)">
+    <span *ngIf="loggedUser$ | async">
       <a href="#">{{ (loggedUser$ | async)?.email }}</a>
       <button class="logout-button" (click)="onLogoutClicked()">LOGOUT</button>
     </span>
